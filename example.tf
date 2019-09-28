@@ -3,15 +3,13 @@ provider "aws" {
   region  = var.region
 }
 
-resource "aws_instance" "example" {
-  ami           = var.amis[var.region]
-  instance_type = "t2.micro"
-  tags = {
-    name = "Hello Example"
-  }
-}
+resource "aws_s3_bucket" "hello-terraform-s3" {
+  bucket        = "hello-terraform-s3"
+  acl           = "public-read"
+  force_destroy = true
 
-resource "aws_eip" "ip" {
-  vpc      = true
-  instance = aws_instance.example.id
+  website {
+    index_document = "index.html"
+    error_document = "404.html"
+  }
 }
